@@ -1,1 +1,0 @@
-/usr/bin/clang++ -g CMakeFiles/PetDB.dir/main.cpp.o CMakeFiles/PetDB.dir/table/data_block.cpp.o CMakeFiles/PetDB.dir/table/index_block.cpp.o CMakeFiles/PetDB.dir/table/metadata_block.cpp.o CMakeFiles/PetDB.dir/table/sst_builder.cpp.o -o PetDB 
