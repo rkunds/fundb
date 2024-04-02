@@ -1,0 +1,82 @@
+[
+{
+  "directory": "/home/rkunds/projects/petdb/build",
+  "command": "/usr/bin/clang++  -I/home/rkunds/projects/petdb -g -std=gnu++20 -o CMakeFiles/PetDB.dir/main.cpp.o -c /home/rkunds/projects/petdb/main.cpp",
+  "file": "/home/rkunds/projects/petdb/main.cpp"
+},
+{
+  "directory": "/home/rkunds/projects/petdb/build",
+  "command": "/usr/bin/clang++  -I/home/rkunds/projects/petdb -g -std=gnu++20 -o CMakeFiles/PetDB.dir/table/data_block.cpp.o -c /home/rkunds/projects/petdb/table/data_block.cpp",
+  "file": "/home/rkunds/projects/petdb/table/data_block.cpp"
+},
+{
+  "directory": "/home/rkunds/projects/petdb/build",
+  "command": "/usr/bin/clang++  -I/home/rkunds/projects/petdb -g -std=gnu++20 -o CMakeFiles/PetDB.dir/table/index_block.cpp.o -c /home/rkunds/projects/petdb/table/index_block.cpp",
+  "file": "/home/rkunds/projects/petdb/table/index_block.cpp"
+},
+{
+  "directory": "/home/rkunds/projects/petdb/build",
+  "command": "/usr/bin/clang++  -I/home/rkunds/projects/petdb -g -std=gnu++20 -o CMakeFiles/PetDB.dir/table/metadata_block.cpp.o -c /home/rkunds/projects/petdb/table/metadata_block.cpp",
+  "file": "/home/rkunds/projects/petdb/table/metadata_block.cpp"
+},
+{
+  "directory": "/home/rkunds/projects/petdb/build",
+  "command": "/usr/bin/clang++  -I/home/rkunds/projects/petdb -g -std=gnu++20 -o CMakeFiles/PetDB.dir/table/sst_builder.cpp.o -c /home/rkunds/projects/petdb/table/sst_builder.cpp",
+  "file": "/home/rkunds/projects/petdb/table/sst_builder.cpp"
+},
+{
+  "directory": "/home/rkunds/projects/petdb/build",
+  "command": "/usr/bin/clang++  -I/home/rkunds/projects/petdb -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest/include -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest -g -std=gnu++20 -o CMakeFiles/PetDB_test.dir/tests/test_all.cpp.o -c /home/rkunds/projects/petdb/tests/test_all.cpp",
+  "file": "/home/rkunds/projects/petdb/tests/test_all.cpp"
+},
+{
+  "directory": "/home/rkunds/projects/petdb/build",
+  "command": "/usr/bin/clang++  -I/home/rkunds/projects/petdb -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest/include -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest -g -std=gnu++20 -o CMakeFiles/PetDB_test.dir/tests/data_block_test.cpp.o -c /home/rkunds/projects/petdb/tests/data_block_test.cpp",
+  "file": "/home/rkunds/projects/petdb/tests/data_block_test.cpp"
+},
+{
+  "directory": "/home/rkunds/projects/petdb/build",
+  "command": "/usr/bin/clang++  -I/home/rkunds/projects/petdb -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest/include -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest -g -std=gnu++20 -o CMakeFiles/PetDB_test.dir/table/data_block.cpp.o -c /home/rkunds/projects/petdb/table/data_block.cpp",
+  "file": "/home/rkunds/projects/petdb/table/data_block.cpp"
+},
+{
+  "directory": "/home/rkunds/projects/petdb/build",
+  "command": "/usr/bin/clang++  -I/home/rkunds/projects/petdb -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest/include -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest -g -std=gnu++20 -o CMakeFiles/PetDB_test.dir/table/index_block.cpp.o -c /home/rkunds/projects/petdb/table/index_block.cpp",
+  "file": "/home/rkunds/projects/petdb/table/index_block.cpp"
+},
+{
+  "directory": "/home/rkunds/projects/petdb/build",
+  "command": "/usr/bin/clang++  -I/home/rkunds/projects/petdb -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest/include -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest -g -std=gnu++20 -o CMakeFiles/PetDB_test.dir/table/metadata_block.cpp.o -c /home/rkunds/projects/petdb/table/metadata_block.cpp",
+  "file": "/home/rkunds/projects/petdb/table/metadata_block.cpp"
+},
+{
+  "directory": "/home/rkunds/projects/petdb/build",
+  "command": "/usr/bin/clang++  -I/home/rkunds/projects/petdb -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest/include -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest -g -std=gnu++20 -o CMakeFiles/PetDB_test.dir/table/sst_builder.cpp.o -c /home/rkunds/projects/petdb/table/sst_builder.cpp",
+  "file": "/home/rkunds/projects/petdb/table/sst_builder.cpp"
+},
+{
+  "directory": "/home/rkunds/projects/petdb/build",
+  "command": "/usr/bin/clang++  -I/home/rkunds/projects/petdb -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest/include -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest -g -std=gnu++20 -o CMakeFiles/PetDB_test.dir/reader/sst_reader.cpp.o -c /home/rkunds/projects/petdb/reader/sst_reader.cpp",
+  "file": "/home/rkunds/projects/petdb/reader/sst_reader.cpp"
+},
+{
+  "directory": "/home/rkunds/projects/petdb/build/_deps/googletest-build/googlemock",
+  "command": "/usr/bin/clang++  -I/home/rkunds/projects/petdb -I/home/rkunds/projects/petdb/build/_deps/googletest-src/googlemock/include -I/home/rkunds/projects/petdb/build/_deps/googletest-src/googlemock -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest/include -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest -g -Wall -Wshadow -Wconversion -Wundef -DGTEST_HAS_PTHREAD=1 -fexceptions -W -Wpointer-arith -Wreturn-type -Wcast-qual -Wwrite-strings -Wswitch -Wunused-parameter -Wcast-align -Winline -Wredundant-decls -Wchar-subscripts -std=c++20 -o CMakeFiles/gmock.dir/src/gmock-all.cc.o -c /home/rkunds/projects/petdb/build/_deps/googletest-src/googlemock/src/gmock-all.cc",
+  "file": "/home/rkunds/projects/petdb/build/_deps/googletest-src/googlemock/src/gmock-all.cc"
+},
+{
+  "directory": "/home/rkunds/projects/petdb/build/_deps/googletest-build/googlemock",
+  "command": "/usr/bin/clang++  -I/home/rkunds/projects/petdb -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googlemock/include -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googlemock -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest/include -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest -g -Wall -Wshadow -Wconversion -Wundef -DGTEST_HAS_PTHREAD=1 -fexceptions -W -Wpointer-arith -Wreturn-type -Wcast-qual -Wwrite-strings -Wswitch -Wunused-parameter -Wcast-align -Winline -Wredundant-decls -Wchar-subscripts -std=c++20 -o CMakeFiles/gmock_main.dir/src/gmock_main.cc.o -c /home/rkunds/projects/petdb/build/_deps/googletest-src/googlemock/src/gmock_main.cc",
+  "file": "/home/rkunds/projects/petdb/build/_deps/googletest-src/googlemock/src/gmock_main.cc"
+},
+{
+  "directory": "/home/rkunds/projects/petdb/build/_deps/googletest-build/googletest",
+  "command": "/usr/bin/clang++  -I/home/rkunds/projects/petdb -I/home/rkunds/projects/petdb/build/_deps/googletest-src/googletest/include -I/home/rkunds/projects/petdb/build/_deps/googletest-src/googletest -g -Wall -Wshadow -Wconversion -Wundef -DGTEST_HAS_PTHREAD=1 -fexceptions -W -Wpointer-arith -Wreturn-type -Wcast-qual -Wwrite-strings -Wswitch -Wunused-parameter -Wcast-align -Winline -Wredundant-decls -Wchar-subscripts -std=c++20 -o CMakeFiles/gtest.dir/src/gtest-all.cc.o -c /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest/src/gtest-all.cc",
+  "file": "/home/rkunds/projects/petdb/build/_deps/googletest-src/googletest/src/gtest-all.cc"
+},
+{
+  "directory": "/home/rkunds/projects/petdb/build/_deps/googletest-build/googletest",
+  "command": "/usr/bin/clang++  -I/home/rkunds/projects/petdb -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest/include -isystem /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest -g -Wall -Wshadow -Wconversion -Wundef -DGTEST_HAS_PTHREAD=1 -fexceptions -W -Wpointer-arith -Wreturn-type -Wcast-qual -Wwrite-strings -Wswitch -Wunused-parameter -Wcast-align -Winline -Wredundant-decls -Wchar-subscripts -std=c++20 -o CMakeFiles/gtest_main.dir/src/gtest_main.cc.o -c /home/rkunds/projects/petdb/build/_deps/googletest-src/googletest/src/gtest_main.cc",
+  "file": "/home/rkunds/projects/petdb/build/_deps/googletest-src/googletest/src/gtest_main.cc"
+}
+]
