@@ -17,9 +17,7 @@ void IndexBlock::AddEntry(const std::string& key, size_t offset) {
 }
 
 void IndexBlock::WriteToFile(std::ofstream& file) {
-    // file.seekp(0, std::ios::end);
-    std::cout << "$ curr file position: " << file.tellp() << std::endl;
-
+    std::ofstream sanity_text("index_block_text");
     size_t num_entries = keys_.size();
  
     std::vector<size_t> key_offsets = std::vector<size_t>();
@@ -45,9 +43,9 @@ void IndexBlock::WriteToFile(std::ofstream& file) {
         block_size_ += key_size;
         file.write((char*) &offsets_[i], sizeof(size_t));
         block_size_ += sizeof(size_t);
-    }
 
-    std::cout << "$ end file position: " << file.tellp() << std::endl;
-    std::cout << "$ block size: " << block_size_ << std::endl;
+        std::cout << "key " << keys_[i] << " offset " << offsets_[i] << std::endl;
+        sanity_text << "key " << keys_[i] << " offset " << offsets_[i] << std::endl;
+    }
 }
 

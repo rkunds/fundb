@@ -1,13 +1,16 @@
 #pragma once
 
+
 #include <string>
 #include <fstream>
+
+#include "../table.h"
 
 #include "data_block.h"
 #include "index_block.h"
 #include "metadata_block.h"
 
-class SSTBuilder {
+class BlockBuilder : public SSTable {
     private:
         std::string file_name_;
         std::ofstream file_;
@@ -29,8 +32,9 @@ class SSTBuilder {
         bool finished_ = false;
 
     public: 
-        SSTBuilder(std::string file_name, size_t target_block_size);
-    
+        BlockBuilder(std::string file_name, size_t target_block_size);
+        bool Open();
         void AddEntry(std::string& key, std::string& value);
-        void CompleteSSTFile();
+        bool WriteAndClose();
+        size_t GetFileSize();
 };

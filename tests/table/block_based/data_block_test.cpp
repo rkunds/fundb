@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
-#include "table/data_block.h"
+#include "table/block_based/data_block.h"
 
 TEST(DataBlockTest, DefaultConstructor) {
     DataBlock block;
-    EXPECT_EQ(block.GetBlockSize(), 4096);
+    EXPECT_EQ(block.GetBlockSize(), sizeof(size_t));
     EXPECT_EQ(block.GetNumEntries(), 0);
     EXPECT_EQ(block.GetMinKey(), "");
     EXPECT_EQ(block.GetMaxKey(), "");
@@ -12,7 +12,7 @@ TEST(DataBlockTest, DefaultConstructor) {
 TEST(DataBlockTest, ConstructorWithTargetBlockSize) {
     const size_t target_size = 1024;
     DataBlock block(target_size);
-    EXPECT_EQ(block.GetBlockSize(), target_size);
+    EXPECT_EQ(block.GetBlockSize(), sizeof(size_t));
     EXPECT_EQ(block.GetNumEntries(), 0);
     EXPECT_EQ(block.GetMinKey(), "");
     EXPECT_EQ(block.GetMaxKey(), "");
@@ -53,7 +53,7 @@ TEST(DataBlockTest, WriteToFile) {
     size_t num_entries;
     input_file.read(reinterpret_cast<char*>(&num_entries), sizeof(size_t));
     EXPECT_EQ(num_entries, 2);
-    // ... add more verification for the data buffer
+
     input_file.close();
     std::remove("test.dat");
 }
@@ -65,7 +65,7 @@ TEST(DataBlockTest, Reset) {
     EXPECT_EQ(block.GetNumEntries(), 2);
 
     block.Reset();
-    EXPECT_EQ(block.GetBlockSize(), 4096);
+    EXPECT_EQ(block.GetBlockSize(), sizeof(size_t));
     EXPECT_EQ(block.GetNumEntries(), 0);
     EXPECT_EQ(block.GetMinKey(), "");
     EXPECT_EQ(block.GetMaxKey(), "");

@@ -1,4 +1,4 @@
-#include "table/sst_builder.h"
+#include "table/block_based/block_builder.h"
 #include "common/utils/generate_kv.h"
 
 #include <iostream>
@@ -10,26 +10,25 @@ void ReadSST();
 
 int main() {
     WriteSST();
-    ReadSST();
+    // ReadSST();
     return 0;
 }
 
 void WriteSST() {
-    SSTBuilder builder = SSTBuilder("testsst", (size_t) 4096);
+    BlockBuilder builder = BlockBuilder("1KSST", (size_t) 4096);
     std::ofstream textcontents("textcontents.txt");
-    std::vector<std::pair<std::string, std::string>> kv = GenerateRandomKV(100, 20, 5, 75, 10);
+    std::vector<std::pair<std::string, std::string>> kv = GenerateRandomKV(1000, 30, 5, 100, 10);
 
     for (auto& p : kv) {
         builder.AddEntry(p.first, p.second);
         textcontents << p.first << " " << p.second << std::endl;
-        // std::cout << "Added entry: " << p.first << " " << p.second << std::endl;
     }
 
-    builder.CompleteSSTFile();
+    builder.WriteAndClose();
 }
 
 void ReadSST() {
-    std::ifstream file("testsst", std::ios::binary);
+    std::ifstream file("1KSST", std::ios::binary);
     if (!file.is_open()) {
         std::cerr << "Failed to open file" << std::endl;
         return;
@@ -74,6 +73,13 @@ void ReadSST() {
     file.read(&max_key[0], max_key_size);
     std::cout << "Max key: " << max_key << std::endl;
 
-    
+    size_t largest_val = 0;
+    size_t largest_key = 0;
 
+    file.read((char*) &largest_val, sizeof(size_t));
+    std::cout << "Largest val size: " << largest_val << std::endl;
+    file.read((char*) &largest_key, sizeof(size_t));
+    std::cout << "Largest key size: " << largest_key << std::endl;
+
+    file.close();
 }

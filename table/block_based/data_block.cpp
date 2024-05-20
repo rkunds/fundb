@@ -1,5 +1,7 @@
 #include "data_block.h"
 
+#include <iostream>
+
 DataBlock::DataBlock(size_t target_block_size) {
     data_buffer_ = "";
     num_entries_ = 0;    
@@ -54,8 +56,7 @@ void DataBlock::WriteToFile(std::ofstream &file) {
 }
 
 size_t DataBlock::GetBlockSize() {
-    // round up to nearest multiple of target block size
-    return (curr_block_size_ + target_block_size_ - 1) / target_block_size_ * target_block_size_;
+    return curr_block_size_;
 }
 
 size_t DataBlock::GetNumEntries() {
