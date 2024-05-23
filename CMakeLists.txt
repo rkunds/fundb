@@ -14,6 +14,7 @@ FetchContent_Declare(
 
 set(COMMON
     common/utils/generate_kv.cpp
+    common/utils/threadpool.cpp
 )
 
 set(TABLE_SOURCES
@@ -26,7 +27,7 @@ set(TABLE_SOURCES
 )
 
 set(MEMTABLE_SOURCES
-    memtable/memtable.cpp
+    memtable/skiplist.cpp
 )
 
 set(READER_SOURCES
@@ -35,9 +36,11 @@ set(READER_SOURCES
 
 set(TEST_SOURCES
     tests/table/block_based/data_block_test.cpp
+
+    tests/memtable/skiplist_test.cpp
 )
 
-add_executable(${PROJECT_NAME} main.cpp ${COMMON} ${TABLE_SOURCES})
+add_executable(${PROJECT_NAME} main.cpp ${COMMON} ${MEMTABLE_SOURCES} ${TABLE_SOURCES})
 add_executable(reader reader/reader.cpp ${COMMON} ${TABLE_SOURCES} ${READER_SOURCES})
 
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
@@ -46,7 +49,7 @@ enable_testing()
 
 
 
-add_executable(${PROJECT_NAME}_test tests/test_all.cpp ${COMMON} ${TEST_SOURCES} ${TABLE_SOURCES} ${READER_SOURCES})
+add_executable(${PROJECT_NAME}_test tests/test_all.cpp ${COMMON} ${TEST_SOURCES} ${MEMTABLE_SOURCES} ${TABLE_SOURCES} ${READER_SOURCES})
 target_link_libraries(${PROJECT_NAME}_test gtest_main)
 
 add_test(NAME ${PROJECT_NAME}_test COMMAND ${PROJECT_NAME}_test)
