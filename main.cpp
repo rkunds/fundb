@@ -1,18 +1,56 @@
 #include "table/block_based/block_builder.h"
-#include "common/utils/generate_kv.h"
+#include "common/utils/generate.h"
+#include "common/utils/threadpool.h"
+#include "common/structures/skiplist.h"
 
 #include <iostream>
 #include <fstream>
+#include <thread>
 #include <vector>
+#include <random>
 
 void WriteSST();
 void ReadSST();
 
 int main() {
-    WriteSST();
     // ReadSST();
+    WriteSST(); 
+    ReadSST();
     return 0;
 }
+// int main() {
+//     SkipList sl = SkipList(5, 0.5);
+//     std::vector<std::pair<std::string, std::string>> kv = GenerateRandomKV(1000, 30, 5, 100, 10);
+
+    
+
+//     ThreadPool tp = ThreadPool(8);
+//     // each thread will have a vector where we append the time it took to insert each key
+//     std::vector<double> times = std::vector<double>(kv.size(), 0.0);
+
+//     for (size_t i = 0; i < kv.size(); i++) {
+//         std::string key = kv[i].first;
+//         std::string value = kv[i].second;
+//         tp.AddTask([key, value, &sl, &times, i] () {
+//             auto start = std::chrono::high_resolution_clock::now();
+//             sl.Insert(key, value);
+//             auto end = std::chrono::high_resolution_clock::now();
+//             times[i] = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
+//         });
+//     }
+
+//     tp.Stop();
+
+
+
+//     std::cout << "memtable size: " << sl.GetTotalSize() << " bytes" << std::endl;
+//     std::cout << "num entries: " << sl.GetNumEntries() << std::endl;
+//     size_t j = 0;
+//     for (auto it = sl.begin(); it != sl.end(); ++it) {
+//         auto [k, v] = *it;
+//         std::cout << j++ << ": " << k << " " << v << std::endl;
+//     }
+// }
 
 void WriteSST() {
     BlockBuilder builder = BlockBuilder("1KSST", (size_t) 4096);

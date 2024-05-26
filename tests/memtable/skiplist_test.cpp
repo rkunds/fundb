@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <string>
-#include "memtable/skiplist.h"
+#include "common/structures/skiplist.h"
 
 TEST(SkipListTest, InsertAndGet) {
     SkipList skiplist(16, 0.5);
@@ -65,4 +65,22 @@ TEST(SkipListTest, Delete) {
     skiplist.Delete(key2);
     EXPECT_FALSE(skiplist.Exists(key1));
     EXPECT_FALSE(skiplist.Exists(key2));
+}
+
+TEST(SkipListTest, InsertMany) {
+    SkipList skiplist(16, 0.5);
+    for (int i = 0; i < 100; i++) {
+        std::string key = "key" + std::to_string(i);
+        std::string value = "value" + std::to_string(i);
+        skiplist.Insert(key, value);
+    }
+
+    for (int i = 0; i < 100; i++) {
+        std::string key = "key" + std::to_string(i);
+        std::string value = "value" + std::to_string(i);
+        std::string ret = skiplist.Get(key);
+        EXPECT_STREQ(ret.c_str(), value.c_str());
+    }
+
+    EXPECT_EQ(skiplist.GetNumEntries(), 100);
 }

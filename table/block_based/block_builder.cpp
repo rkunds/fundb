@@ -54,7 +54,7 @@ void BlockBuilder::AddEntry(std::string& key, std::string& value) {
 
     if (metadata_block_.GetMaxKeySize() < key.size()) {
         if (key.size() > 1000) {
-            std::cout << "key size  " << key.size() << std::endl;
+            // std::cout << "key size  " << key.size() << std::endl;
         }
         metadata_block_.SetMaxKeySize(key.size());
     }

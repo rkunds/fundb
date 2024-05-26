@@ -14,6 +14,8 @@ SkipList::~SkipList() {
     }
 
     head = nullptr;
+
+    return;
 }
 
 size_t SkipList::RandomLevel() {

@@ -4,6 +4,13 @@ project(PetDB)
 SET(CMAKE_CXX_STANDARD 20)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+
+# print which clang
+message(STATUS "CMAKE_CXX_COMPILER: ${CMAKE_CXX_COMPILER}")
+
+# use /opt/homebrew/opt/llvm/bin/clang++
+# set(CMAKE_CXX_COMPILER /opt/homebrew/opt/llvm/bin/clang++)
+
 include(FetchContent)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 FetchContent_Declare(
@@ -13,8 +20,10 @@ FetchContent_Declare(
 
 
 set(COMMON
-    common/utils/generate_kv.cpp
+    common/utils/generate.cpp
     common/utils/threadpool.cpp
+
+    common/structures/skiplist.cpp
 )
 
 set(TABLE_SOURCES
@@ -26,33 +35,36 @@ set(TABLE_SOURCES
     table/block_based/block_builder.cpp
 )
 
+set(COMPACTION_SOURCES
+    compaction/sst_manager.cpp 
+)
+
 set(MEMTABLE_SOURCES
-    memtable/skiplist.cpp
+    memtable/memtable.cpp
+    compaction/sst_manager.cpp 
 )
 
 set(READER_SOURCES
     reader/sst_reader.cpp
+    reader/read_engine.cpp
 )
 
 set(TEST_SOURCES
     tests/table/block_based/data_block_test.cpp
-
     tests/memtable/skiplist_test.cpp
 )
 
-add_executable(${PROJECT_NAME} main.cpp ${COMMON} ${MEMTABLE_SOURCES} ${TABLE_SOURCES})
+add_executable(${PROJECT_NAME} main.cpp ${COMMON} ${MEMTABLE_SOURCES}  ${TABLE_SOURCES})
 add_executable(reader reader/reader.cpp ${COMMON} ${TABLE_SOURCES} ${READER_SOURCES})
+
+add_executable(c_test memory_test.cpp ${COMMON} ${TABLE_SOURCES} ${READER_SOURCES}  ${MEMTABLE_SOURCES})
 
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 enable_testing()
-
-
 
 add_executable(${PROJECT_NAME}_test tests/test_all.cpp ${COMMON} ${TEST_SOURCES} ${MEMTABLE_SOURCES} ${TABLE_SOURCES} ${READER_SOURCES})
 target_link_libraries(${PROJECT_NAME}_test gtest_main)
 
 add_test(NAME ${PROJECT_NAME}_test COMMAND ${PROJECT_NAME}_test)
 target_link_libraries(${PROJECT_NAME}_test gtest_main)
-
-

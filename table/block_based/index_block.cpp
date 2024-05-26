@@ -44,8 +44,8 @@ void IndexBlock::WriteToFile(std::ofstream& file) {
         file.write((char*) &offsets_[i], sizeof(size_t));
         block_size_ += sizeof(size_t);
 
-        std::cout << "key " << keys_[i] << " offset " << offsets_[i] << std::endl;
-        sanity_text << "key " << keys_[i] << " offset " << offsets_[i] << std::endl;
+        // std::cout << "key " << keys_[i] << " offset " << offsets_[i] << std::endl;
+        // sanity_text << "key " << keys_[i] << " offset " << offsets_[i] << std::endl;
     }
 }
 

@@ -39,6 +39,10 @@ void ThreadPool::Stop() {
     threads.clear();
 }
 
+bool ThreadPool::IsStopped() {
+    return stop;
+}
+
 void ThreadPool::AddTask(std::function<void()> task) {
     {
         std::unique_lock<std::mutex> lock(mutex);

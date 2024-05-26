@@ -13,6 +13,7 @@ class ThreadPool {
         ~ThreadPool();
         void AddTask(std::function<void()> task);
         void Stop();
+        bool IsStopped();
     private:
         std::vector<std::thread> threads;
         std::queue<std::function<void()>> tasks;
