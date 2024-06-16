@@ -4,12 +4,7 @@ project(PetDB)
 SET(CMAKE_CXX_STANDARD 20)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
-# print which clang
-message(STATUS "CMAKE_CXX_COMPILER: ${CMAKE_CXX_COMPILER}")
-
-# use /opt/homebrew/opt/llvm/bin/clang++
-# set(CMAKE_CXX_COMPILER /opt/homebrew/opt/llvm/bin/clang++)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer -g")
 
 include(FetchContent)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})

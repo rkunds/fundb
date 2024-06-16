@@ -51,7 +51,7 @@ TEST(DataBlockTest, WriteToFile) {
     // Verify the contents of the file
     std::ifstream input_file("test.dat", std::ios::binary);
     size_t num_entries;
-    input_file.read(reinterpret_cast<char*>(&num_entries), sizeof(size_t));
+    input_file.read((char*)&num_entries, sizeof(size_t));
     EXPECT_EQ(num_entries, 2);
 
     input_file.close();

@@ -5,6 +5,7 @@
 #include <memory>
 #include <queue>
 #include <filesystem>
+#include <uuid/uuid.h>
 
 #include "table/block_based/block_builder.h"
 #include "common/utils/generate.h"
@@ -23,6 +24,7 @@ class SSTManager {
     private:
         std::string data_dir_ = "db_data/";
         std::vector<std::string> sst_files_;
+
         std::queue<std::unique_ptr<SkipList>> memtables_;
         ThreadPool* l0_flush_pool_;
 

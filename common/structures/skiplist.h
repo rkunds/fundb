@@ -27,7 +27,9 @@ class SkipList {
         SkipList(size_t max_level, double p);
         ~SkipList();
 
-        size_t Insert(std::string key, std::string value);
+        void SetSeed(unsigned int seed); // for testing purposes
+
+        size_t Insert(std::string& key, std::string& value);
         bool Exists(std::string& key);
         std::string Get(std::string& key);
         void Delete(std::string& key);

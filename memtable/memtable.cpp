@@ -4,22 +4,20 @@ Memtable::Memtable(size_t flush_threshold, size_t max_level, double p) {
     flush_threshold_ = flush_threshold;
     max_level_ = max_level;
     p_ = p;
-    // skiplist_ = std::unique_ptr<SkipList>(new SkipList(max_level_, p_));
     skiplist_ = new SkipList(max_level_, p_);
     total_size_ = 0;
     num_entries_ = 0;
+
 }
 
 Memtable::Memtable(size_t flush_threshold) {
     flush_threshold_ = flush_threshold;
-    // skiplist_ = std::unique_ptr<SkipList>(new SkipList(max_level_, p_));
     skiplist_ = new SkipList(max_level_, p_);
     total_size_ = 0;
     num_entries_ = 0;
 }
 
 Memtable::~Memtable() {
-    // nothing to do
     delete skiplist_;
 }
 
@@ -33,10 +31,18 @@ bool Memtable::Put(std::string& key, std::string& value) {
     num_entries_++;
 
     if (total_size_ >= flush_threshold_) {
-        // sleep for a while
-        std::cout << "eeping" << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        this->FlushToL0();
+        std::unique_lock<std::mutex> lock(flush_mtx_);
+        if (flushing_) {
+            std::cout << std::this_thread::get_id() << " is waiting" << std::endl;
+            flush_cv_.wait(lock, [this] {return !flushing_;});
+        } else {
+            std::cout << std::this_thread::get_id() << " is initiating the flush" << std::endl;
+            flushing_ = true;
+            this->FlushToL0();
+            flushing_ = false;
+            std::cout << std::this_thread::get_id() << " is notifying the other threads" << std::endl;
+            flush_cv_.notify_all();
+        }
     }
 
     return true;
@@ -62,6 +68,10 @@ std::future<bool> Memtable::DeleteAsync(std::string& key) {
 }
 
 void Memtable::FlushToL0() {
+    if (skiplist_ && skiplist_->GetTotalSize() <= flush_threshold_) {
+        return;
+    }
+
     sst_manager_->AddMemtable(skiplist_);
     skiplist_ = new SkipList(max_level_, p_);
     total_size_ = 0;

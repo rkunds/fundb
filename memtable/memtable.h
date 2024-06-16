@@ -36,6 +36,10 @@ class Memtable : public MemtableInterface {
 
         SSTManager* sst_manager_;
 
+        std::mutex flush_mtx_;
+        std::condition_variable flush_cv_;
+        bool flushing_ = false;
+
 };
 
 class MemtableBuilder {

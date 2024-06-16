@@ -76,3 +76,23 @@ std::vector<std::pair<std::string, std::string>> GenerateRandomKV(size_t num_ent
 
     return kv;
 }
+
+std::vector<std::string> GenNStrings(size_t num_strings, size_t length) {
+    std::vector<std::string> strings;
+    strings.reserve(num_strings);
+
+    for (size_t i = 0; i < num_strings; i++) {
+        strings.push_back(GenerateRandomString(length));
+    }
+
+    return strings;
+}
+
+std::string GenerateUUID() {
+    uuid_t uuid;
+    uuid_generate_random(uuid);
+    char uuid_str[37];
+    uuid_unparse(uuid, uuid_str);
+    return std::string(uuid_str);
+}
+

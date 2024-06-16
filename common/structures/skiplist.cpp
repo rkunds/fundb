@@ -1,8 +1,14 @@
 #include "skiplist.h"
 
 SkipList::SkipList(size_t max_level, double p) : max_level(max_level), p(p), total_size(0), level(0), num_entries(0) {
-    head = new Node("", "", max_level);
-    std::srand(std::time(nullptr));
+    head = new Node("", "", max_level+1);
+    auto time = std::time(nullptr);
+    SetSeed(static_cast<unsigned int>(time));
+    level = 0;  
+}
+
+void SkipList::SetSeed(unsigned int seed) {
+    std::srand(seed);
 }
 
 SkipList::~SkipList() {
@@ -27,10 +33,13 @@ size_t SkipList::RandomLevel() {
     return lvl;
 }
 
-size_t SkipList::Insert(std::string key, std::string value) {
+size_t SkipList::Insert(std::string& key, std::string& value) {
+    if (value == "") {
+        std::cout << "empty value ?? " << std::endl;
+    }
     std::lock_guard<std::mutex> lock(mutex);
 
-    std::vector<Node*> update(max_level, nullptr);
+    std::vector<Node*> update(max_level+1, nullptr);
     Node* curr = head;
 
     for (int i = level; i >= 0; i--) {
@@ -60,7 +69,7 @@ size_t SkipList::Insert(std::string key, std::string value) {
         level = new_level;
     }
 
-    Node* new_node = new Node(key, value, new_level + 1);
+    Node* new_node = new Node(key, value, max_level + 1);
 
     for (size_t i = 0; i <= new_level; i++) {
         new_node->forward[i] = update[i]->forward[i];
@@ -108,7 +117,7 @@ std::string SkipList::Get(std::string& key) {
 void SkipList::Delete(std::string& key) {
     std::lock_guard<std::mutex> lock(mutex);
 
-    std::vector<Node*> update(max_level, nullptr);
+    std::vector<Node*> update(max_level+1, nullptr);
     Node* curr = head;
 
     for (int i = level; i >= 0; i--) {
@@ -144,6 +153,7 @@ void SkipList::Print() {
 }
 
 size_t SkipList::GetTotalSize() const {
+    std::lock_guard<std::mutex> lock(mutex);
     return total_size;
 }
 

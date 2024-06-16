@@ -3,6 +3,8 @@
 SSTManager::SSTManager() {
     // makedir data_dir_
     std::filesystem::create_directory(data_dir_);
+    // create 5 levels for now, l0 - l4
+    // 
     l0_flush_pool_ = new ThreadPool(1);
     StartL0FlushThread();
 }
@@ -40,7 +42,7 @@ void SSTManager::AddMemtable(SkipList* memtable) {
     l0_flush_pool_->AddTask([this, memtable]() {
         std::cout << "Flushing memtable to disk" << std::endl;
         std::string f_name = GenerateRandomString(SST_FILE_LEN);
-        std::string f_path = data_dir_ + "/" + f_name;
+        std::string f_path = data_dir_ + "/" + GenerateUUID() + "-" + f_name;
         BlockBuilder builder(f_path, 4096);
         builder.Open();
 
