@@ -1,6 +1,7 @@
 #include "memtable.h"
 
-Memtable::Memtable(size_t flush_threshold, size_t max_level, double p) {
+Memtable::Memtable(size_t flush_threshold, size_t max_level, double p, SSTManager* sst_manager) {
+    sst_manager_ = sst_manager;
     flush_threshold_ = flush_threshold;
     max_level_ = max_level;
     p_ = p;
@@ -10,12 +11,6 @@ Memtable::Memtable(size_t flush_threshold, size_t max_level, double p) {
 
 }
 
-Memtable::Memtable(size_t flush_threshold) {
-    flush_threshold_ = flush_threshold;
-    skiplist_ = new SkipList(max_level_, p_);
-    total_size_ = 0;
-    num_entries_ = 0;
-}
 
 Memtable::~Memtable() {
     delete skiplist_;
@@ -33,14 +28,11 @@ bool Memtable::Put(std::string& key, std::string& value) {
     if (total_size_ >= flush_threshold_) {
         std::unique_lock<std::mutex> lock(flush_mtx_);
         if (flushing_) {
-            std::cout << std::this_thread::get_id() << " is waiting" << std::endl;
             flush_cv_.wait(lock, [this] {return !flushing_;});
         } else {
-            std::cout << std::this_thread::get_id() << " is initiating the flush" << std::endl;
             flushing_ = true;
             this->FlushToL0();
             flushing_ = false;
-            std::cout << std::this_thread::get_id() << " is notifying the other threads" << std::endl;
             flush_cv_.notify_all();
         }
     }
@@ -49,7 +41,9 @@ bool Memtable::Put(std::string& key, std::string& value) {
 }
 
 bool Memtable::Delete(std::string& key) {
-    skiplist_->Delete(key);
+    // skiplist_->Delete(key);
+    std::string tombstone = "";
+    skiplist_->Insert(key, tombstone);
     num_entries_--;
 
     return true;
@@ -77,8 +71,3 @@ void Memtable::FlushToL0() {
     total_size_ = 0;
     num_entries_ = 0;
 }
-
-void Memtable::SetSSTManager(SSTManager* sst_manager) {
-    sst_manager_ = sst_manager;
-}
-

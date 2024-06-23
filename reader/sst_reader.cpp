@@ -1,9 +1,19 @@
 #include "sst_reader.h"
 
+SSTReader::SSTReader(std::string filename) {
+    this->filename_ = filename;
+    
+    try {
+        Open();
+    } catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
+    }
+}
+
 bool SSTReader::Open() {
-    file_.open(filename, std::ios::binary);
+    file_.open(filename_, std::ios::binary);
     if (!file_.is_open()) {
-        std::cerr << "Failed to open file: " << filename << std::endl;
+        std::cerr << "Failed to open file: " << filename_ << std::endl;
         return false;
     }
 
@@ -187,4 +197,85 @@ std::string SSTReader::Get(const std::string& key) {
     }
 
     return "";
+}
+
+size_t SSTReader::GetNumBlocks() {
+    return num_blocks_;
+}
+
+SSTReader::Iterator::Iterator(SSTReader* reader) : reader_(reader) {
+    current_block_ = 0;
+    current_entry_ = 0;
+    num_entries_ = 0;
+
+    ifile_.open(reader_->filename_, std::ios::binary); 
+    ifile_.seekg(0, std::ios::beg);
+
+    num_blocks_ = reader_->GetNumBlocks();  
+    ifile_.read((char*) &num_entries_, sizeof(size_t));
+
+    ReadKeyVal();
+}
+
+void SSTReader::Iterator::ReadKeyVal() {
+    if (current_entry_ >= num_entries_) {
+        current_block_++;
+        size_t entries_in_block = 0;
+        ifile_.read((char*) &entries_in_block, sizeof(size_t));
+        num_entries_ = entries_in_block;
+        current_entry_ = 0;
+    }
+
+    if (current_block_ >= num_blocks_) {
+        current_key_ = "";
+        current_value_ = "";
+        end_ = true;
+
+        SetToEnd();
+
+        return;
+    }
+
+    size_t key_size = 0;
+    size_t val_size = 0;
+    ifile_.read((char*) &key_size, sizeof(size_t));
+    current_key_.resize(key_size);
+    ifile_.read(&current_key_[0], key_size);
+
+    ifile_.read((char*) &val_size, sizeof(size_t));
+    current_value_.resize(val_size);
+    ifile_.read(&current_value_[0], val_size);
+
+    current_entry_++;
+}
+
+SSTReader::Iterator& SSTReader::Iterator::operator++() {
+    ReadKeyVal();
+    return *this;
+}
+
+std::pair<std::string, std::string> SSTReader::Iterator::operator*() {
+    return std::make_pair(current_key_, current_value_);
+}
+
+bool SSTReader::Iterator::operator!=(const Iterator& other) const {
+    return current_block_ != other.current_block_ ||
+           current_entry_ != other.current_entry_  ||
+            end_ != other.end_;
+}
+
+SSTReader::Iterator SSTReader::begin() {
+    return Iterator(this);
+}
+
+SSTReader::Iterator SSTReader::end() {
+    Iterator it(this);
+    it.SetToEnd();
+    return it;
+}
+
+void SSTReader::Iterator::SetToEnd() {
+    current_block_ = num_blocks_;
+    current_entry_ = (size_t) - 1;
+    end_ = true;
 }

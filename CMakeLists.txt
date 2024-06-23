@@ -4,7 +4,7 @@ project(PetDB)
 SET(CMAKE_CXX_STANDARD 20)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer -g -pg")
 
 include(FetchContent)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
@@ -46,16 +46,22 @@ set(READER_SOURCES
 
 set(TEST_SOURCES
     tests/table/block_based/data_block_test.cpp
-    tests/memtable/skiplist_test.cpp
+    tests/common/skiplist_test.cpp
 )
 
-add_executable(${PROJECT_NAME} main.cpp ${COMMON} ${MEMTABLE_SOURCES}  ${TABLE_SOURCES})
-add_executable(reader reader/reader.cpp ${COMMON} ${TABLE_SOURCES} ${READER_SOURCES})
+file(GLOB CPP_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} main/*.cpp)
+foreach(CPP_FILE ${CPP_FILES})
+    get_filename_component(EXE_NAME ${CPP_FILE} NAME_WE)
+    add_executable(${EXE_NAME} ${CPP_FILE} ${COMMON} ${TABLE_SOURCES} ${READER_SOURCES} ${MEMTABLE_SOURCES} ${COMPACTION_SOURCES})
 
-add_executable(c_test memory_test.cpp ${COMMON} ${TABLE_SOURCES} ${READER_SOURCES}  ${MEMTABLE_SOURCES})
+endforeach(CPP_FILE ${CPP_FILES})
+
+add_executable(${PROJECT_NAME} main.cpp ${COMMON} ${MEMTABLE_SOURCES}  ${TABLE_SOURCES} ${READER_SOURCES})
+add_executable(reader reader/reader.cpp ${COMMON} ${TABLE_SOURCES} ${READER_SOURCES})
 
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
+
 enable_testing()
 
 add_executable(${PROJECT_NAME}_test tests/test_all.cpp ${COMMON} ${TEST_SOURCES} ${MEMTABLE_SOURCES} ${TABLE_SOURCES} ${READER_SOURCES})

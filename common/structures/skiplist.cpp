@@ -34,9 +34,6 @@ size_t SkipList::RandomLevel() {
 }
 
 size_t SkipList::Insert(std::string& key, std::string& value) {
-    if (value == "") {
-        std::cout << "empty value ?? " << std::endl;
-    }
     std::lock_guard<std::mutex> lock(mutex);
 
     std::vector<Node*> update(max_level+1, nullptr);
@@ -134,6 +131,9 @@ void SkipList::Delete(std::string& key) {
         total_size -= curr->value.size();
         curr->value = ""; // represent deleted records as empty strings
         num_entries -= 1;
+    } else {
+        std::string tombstone = "";
+        Insert(key, tombstone);
     }
 
     return;

@@ -6,9 +6,7 @@
 
 class Memtable : public MemtableInterface {
     public:
-        Memtable(size_t flush_threshold, size_t max_level, double p);
-        Memtable(size_t flush_threshold);
-
+        Memtable(size_t flushThreshold, size_t maxLevel, double p, SSTManager* sstManager);
         ~Memtable();
 
         std::string Get(std::string& key) override;
@@ -19,11 +17,15 @@ class Memtable : public MemtableInterface {
         std::future<bool> PutAsync( std::string& key,  std::string& value) override;
         std::future<bool> DeleteAsync( std::string& key) override;
 
-        void SetSSTManager(SSTManager* sst_manager);
-        //     sst_manager_ = sst_manager;
-        // }
-
         void FlushToL0();
+
+        size_t GetTotalSize() {
+            return total_size_;
+        }
+
+        size_t GetNumEntries() {
+            return num_entries_;
+        }
 
 
     private:
@@ -68,8 +70,7 @@ class MemtableBuilder {
             if (sst_manager_ == nullptr) {
                 throw std::runtime_error("SSTManager must be set before building Memtable");
             }
-            Memtable* tb = new Memtable(flush_threshold_, max_level_, p_);
-            tb->SetSSTManager(sst_manager_);
+            Memtable* tb = new Memtable(flush_threshold_, max_level_, p_, sst_manager_);
 
             return tb;
         }

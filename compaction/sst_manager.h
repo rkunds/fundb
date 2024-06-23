@@ -13,6 +13,9 @@
 #include "common/structures/skiplist.h"
 
 const int SST_FILE_LEN = 10;
+const int KB = 1024;
+const int MB = 1024 * KB;
+const int GB = 1024 * MB;
 
 class SSTManager {
     public:
@@ -28,5 +31,6 @@ class SSTManager {
         std::queue<std::unique_ptr<SkipList>> memtables_;
         ThreadPool* l0_flush_pool_;
 
-        void StartL0FlushThread();
+        size_t level_amplification_ = 10;
+        size_t max_level_ = 5;
 };
