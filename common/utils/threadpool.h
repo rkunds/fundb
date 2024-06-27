@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <mutex>
+#include <functional>
 #include <condition_variable>
 #include <queue>
 

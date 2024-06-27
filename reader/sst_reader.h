@@ -4,6 +4,7 @@
 #include <string>
 #include <istream>
 #include <fstream>
+#include <chrono>
 
 #include "table/block_based/metadata_block.h"
 

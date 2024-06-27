@@ -4,7 +4,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <uuid/uuid.h>
+#include <iomanip>
+#include <sstream>
 
 std::string GenerateRandomString(double length);
 
