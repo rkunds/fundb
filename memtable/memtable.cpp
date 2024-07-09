@@ -11,7 +11,6 @@ Memtable::Memtable(size_t flush_threshold, size_t max_level, double p, SSTManage
 
 }
 
-
 Memtable::~Memtable() {
     delete skiplist_;
 }

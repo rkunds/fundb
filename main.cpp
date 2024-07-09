@@ -2,6 +2,7 @@
 #include "common/utils/generate.h"
 #include "common/utils/threadpool.h"
 #include "common/structures/skiplist.h"
+#include "reader/sst_reader.h"
 
 #include <iostream>
 #include <fstream>
@@ -13,10 +14,29 @@ void WriteSST();
 void ReadSST();
 
 int main() {
-    // ReadSST();
-    WriteSST(); 
-    ReadSST();
-    return 0;
+    // SSTBuilder builder = SSTBuilder("1KSST", 4096);
+    BlockBuilder builder = BlockBuilder("1KSST", 4096);
+    std::vector<std::pair<std::string, std::string>> kv = GenerateRandomKV(1000, 30, 5, 100, 10);
+
+    for (auto& p : kv) {
+        builder.AddEntry(p.first, p.second);
+    }
+
+    builder.WriteAndClose();
+
+    SSTReader reader = SSTReader("1KSST");
+    reader.Open();
+    size_t i = 0;
+    for (auto it = reader.begin(); it != reader.end(); ++it) {
+        auto [k, v] = *it;
+        // check if the key-value pair is the same as the one we inserted
+        if (kv[i].first != k || kv[i].second != v) {
+            std::cout << "key-value pair mismatch" << std::endl;
+        }
+        i++;
+    }
+
+    std::cout << "done" << std::endl;
 }
 // int main() {
 //     SkipList sl = SkipList(5, 0.5);
@@ -66,58 +86,46 @@ void WriteSST() {
 }
 
 void ReadSST() {
-    std::ifstream file("1KSST", std::ios::binary);
-    if (!file.is_open()) {
-        std::cerr << "Failed to open file" << std::endl;
-        return;
-    }
-
-    size_t file_size = 0;
-    file.seekg(0, std::ios::end);
-    file_size = file.tellg();
-    file_size = file_size - sizeof(size_t);
-
-    file.seekg(file_size, std::ios::beg);
-
-    size_t metadata_offset = 0;
-    file.read((char*) &metadata_offset, sizeof(size_t));
-    std::cout << "Metadata offset: " << metadata_offset << std::endl;
+    std::string filename = "/Users/rkunds/code/fundb/build/db_data/BCF5AD16-6D68-45A8-A149-E8EC6C3B4017-6aO3qVjPWc";
+    SSTReader reader = SSTReader(filename);
 
 
-    size_t index_offset = 0;
-    size_t num_blocks = 0;
+    // create file reader with filename
+
+    std::ifstream r(filename, std::ios::binary);
+
+    size_t num_blocks = reader.GetNumBlocks();
+    MetadataBlock meta = reader.GetMetadataBlock();
+
+    std::cout << "num entries: " << meta.GetNumEntries() << std::endl;
+    std::cout << "num blocks: " << num_blocks << std::endl;
+
     size_t num_entries = 0;
-    size_t min_key_size = 0;
-    size_t max_key_size = 0;
-    std::string min_key = "";
-    std::string max_key = "";
+    size_t total_entries = 0;
 
-    file.seekg(metadata_offset, std::ios::beg);
-    std::cout << "curr pos: " << file.tellg() << std::endl;
-    file.read((char*) &index_offset, sizeof(size_t));
-    std::cout << "Index offset: " << index_offset << std::endl;
-    file.read((char*) &num_blocks, sizeof(size_t));
-    std::cout << "Num blocks: " << num_blocks << std::endl;
-    file.read((char*) &num_entries, sizeof(size_t));
-    std::cout << "Num entries: " << num_entries << std::endl;
-    file.read((char*) &min_key_size, sizeof(size_t));
-    std::cout << "Min key size: " << min_key_size << std::endl;
-    min_key.resize(min_key_size);
-    file.read(&min_key[0], min_key_size);
-    std::cout << "Min key: " << min_key << std::endl;
-    file.read((char*) &max_key_size, sizeof(size_t));
-    std::cout << "Max key size: " << max_key_size << std::endl;
-    max_key.resize(max_key_size);
-    file.read(&max_key[0], max_key_size);
-    std::cout << "Max key: " << max_key << std::endl;
+    for (size_t i = 0; i < num_blocks; i++) {
+        size_t entries_in_block = 0;
+        r.read((char*) &entries_in_block, sizeof(size_t));
 
-    size_t largest_val = 0;
-    size_t largest_key = 0;
+        for (size_t j = 0; j < entries_in_block; j++) {
+            size_t key_size = 0;
+            size_t val_size = 0;    
+            std::string key;
+            std::string val;
 
-    file.read((char*) &largest_val, sizeof(size_t));
-    std::cout << "Largest val size: " << largest_val << std::endl;
-    file.read((char*) &largest_key, sizeof(size_t));
-    std::cout << "Largest key size: " << largest_key << std::endl;
+            r.read((char*) &key_size, sizeof(size_t));
+            key.resize(key_size);
+            r.read(&key[0], key_size);
 
-    file.close();
+            r.read((char*) &val_size, sizeof(size_t));
+            val.resize(val_size);
+            r.read(&val[0], val_size);
+
+
+            // std::cout << key << " " << val << std::endl;
+            total_entries++;
+        }
+    }
+    
+    std::cout << "total entries: " << total_entries << std::endl;
 }
